@@ -8,3 +8,7 @@ _I used to track my finances in a spreadsheet document, using custom written fun
 > This software was made to satisfy my finance tracking needs. Maybe this is not the tool for you, so keep that in mind. I decided to Open Source my project so anybody can use it or modify it according to their needs. If this project is sampled or used in a commercial / public project I require attribution in form of a link to this repository. 
 
 
+## 📜 Documentation
+
+Here you can read a detailed documentation about how to setup and how to use the software
+[📄 DOCUMENTATION](./docs/index.md)
