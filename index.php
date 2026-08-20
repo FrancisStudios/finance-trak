@@ -8,7 +8,7 @@
     * │  Author      : © Francis Studios by L.   │
     * └──────────────────────────────────────────┘
 */
-
+include "./src/modules/database-connection.module.php";
 include "./src/modules/database-installer.module.php"; // This installs db structure into your DB manager 
 
 ?>
