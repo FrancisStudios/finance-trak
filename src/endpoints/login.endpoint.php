@@ -47,10 +47,6 @@ if (empty($username) || empty($password)) {
  * this is the right place for it ^^ ***********************
  * ---------------------------------------------------------
  */
-
-$password = hash('sha256', $password); //not very secure on this side
-//but plenty good for home lab
-
 $pdo = DatabaseConnection::getConnection();
 $query = $pdo->prepare('SELECT UID, Username, Password, Privileges FROM users WHERE username = :username AND password = :password LIMIT 1');
 $query->execute([

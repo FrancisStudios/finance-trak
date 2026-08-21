@@ -34,26 +34,54 @@
             .getElementById("submit-login")
             .addEventListener('click', (e) => {
                 const username = document.getElementById('username-field').value;
-                const password = document.getElementById('password-field').value;
+                let password = document.getElementById('password-field').value;
 
-                /* Launch the XHR request to verify login */
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", "./src/endpoints/login.endpoint.php", true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.send(JSON.stringify({
-                    username: username,
-                    password: password
-                }));
+                /* Encrypt password for the backend travels - DB also stores PW in SHA-256 */
+                const passwordEncryptionBuffer = new TextEncoder().encode(password);
+                crypto.subtle.digest('SHA-256', passwordEncryptionBuffer).then(
+                    (_hashBuffer) => {
+                        const hashArray = Array.from(new Uint8Array(_hashBuffer));
+
+                        password = hashArray
+                            .map(b => b.toString(16).padStart(2, '0'))
+                            .join('');
 
 
-                xhr.onreadystatechange = function() {
-                    if (this.readyState != 4) return;
+                        /* Launch the XHR request to verify login */
+                        const xhr = new XMLHttpRequest();
+                        xhr.open("POST", "./src/endpoints/login.endpoint.php", true);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.send(JSON.stringify({
+                            username: username,
+                            password: password
+                        }));
 
-                    if (this.status == 200) {
-                        var data = JSON.parse(this.responseText);
-                        console.log(data);
+                        /* If login successful, create the user session */
+                        xhr.onreadystatechange = function() {
+                            if (this.readyState != 4) return;
+
+                            if (this.status == 200) {
+                                let data = JSON.parse(this.responseText);
+
+                                if (data.success) {
+                                    let userSession = {
+                                        username: data.user.username,
+                                        password: data.user.password,
+                                    }
+
+                                    sessionStorage.setItem(
+                                        'ftses',
+                                        JSON.stringify(userSession)
+                                    );
+
+                                   window.location.href = './src/main.php';
+                                }
+                                console.log(data);
+                            }
+                        };
+
                     }
-                };
+                );
             });
     });
 </script>
