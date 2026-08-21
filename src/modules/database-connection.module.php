@@ -8,6 +8,7 @@
     * │  Author      : © Francis Studios by L.   │
     * └──────────────────────────────────────────┘
 */
+include 'database-installer.module.php';
 
 class DatabaseConnection
 {
@@ -20,14 +21,14 @@ class DatabaseConnection
      * on your VPS or whatever
      */
     private static $host = '127.0.0.1';
-    private static $db   = 'duegev-wiki';
+    private static $db   = 'finance-trak';
     private static $port = 3306;
     private static $charset = 'utf8mb4';
 
     public static function getConnection(): PDO
     {
         if (self::$instance === null) {
-            
+
             $credentials = [];
             $authFilePath = __DIR__ . '/../assets/dbauth.conf';
 
@@ -94,16 +95,41 @@ class DatabaseConnection
                     $options
                 );
             } catch (PDOException $e) {
-                echo (
-                    "<h1>Error occured while establishing PDO MySQL connection!</h1>
+
+                /**
+                 * 1049 Error Code happens when database name doesn't exist
+                 * Here is where I decided to plant the installer for the 
+                 * finance-trak DB
+                 */
+                if ($e->getCode() === 1049) {
+
+                    echo ("<br/> Database was not installed, installing... <br/>");
+
+                    $dbi = DatabaseInstaller::getInstaller(
+                        $db,
+                        $host,
+                        $port,
+                        $charset,
+                        $credentials
+                    );
+
+
+                    self::$instance = $dbi; // The new build DB will be the PDO
+
+                } else {
+                    echo (
+                        "<h1>Error occured while establishing PDO MySQL connection!</h1>
                     Please make sure that<b> the database server is running </b> and <br/>
                     is avaliable at <b>{$host}:{$port}</b>"
 
-                );
-                throw new PDOException($e->getMessage(), (int)$e->getCode());
+                    );
+                    throw new PDOException($e->getMessage(), (int)$e->getCode());
+                }
             }
         }
 
         return self::$instance;
     }
 }
+
+?>

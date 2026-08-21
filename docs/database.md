@@ -74,7 +74,7 @@ Default login: **admin/1234**
 
 **Password:** saves a hash of the PW - string
 
-**Categories:** tiny int which represents four binary values 
+**Privileges:** tiny int which represents four binary values 
 
 | Create | Read | Update | Delete |
 | ------ | ---- | ------ | ------ |

@@ -9,8 +9,6 @@
     * └──────────────────────────────────────────┘
 */
 require_once __DIR__ . "/src/modules/database-connection.module.php"; // This connects to db and establishes DB connection
-include "./src/modules/database-installer.module.php"; // This installs db structure into your DB manager 
 
 $pdo = DatabaseConnection::getConnection();
-
 ?>
