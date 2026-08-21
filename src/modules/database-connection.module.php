@@ -115,6 +115,7 @@ class DatabaseConnection
 
 
                     self::$instance = $dbi; // The new build DB will be the PDO
+                    header("Refresh:0"); //Refresh page after installation
 
                 } else {
                     echo (
