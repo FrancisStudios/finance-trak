@@ -25,6 +25,11 @@ if (!file_exists($authFilePath)) {
     exit(0);
 }
 
+
+/**
+ * Process the config file into the credentials[]
+ * ----------------------------------------------
+ */
 $lines = file(
     $authFilePath,
     FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES
@@ -47,7 +52,14 @@ if (empty($credentials['username']) || empty($credentials['password'])) {
     exit(0);
 }
 
-$dsn = "mysql:host={$host};dbname={$db};port={$port};charset={$charset}";
+/**
+ * Establish PDO connection for later DB queries uwu
+ * ----------------------------------------------
+ */
+$dsn = "mysql:host={$host};
+        dbname={$db};
+        port={$port};
+        charset={$charset}";
 
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -56,8 +68,20 @@ $options = [
 ];
 
 try {
-    $pdo = new PDO($dsn, $credentials['username'], $credentials['password'], $options);
+    $pdo = new PDO(
+        $dsn,
+        $credentials['username'],
+        $credentials['password'],
+        $options
+    );
 } catch (PDOException $e) {
+    echo(
+        "<h1>Error occured while establishing PDO MySQL connection!</h1>
+        Please make sure that<b> the database server is running </b> and <br/>
+        is avaliable at <b>{$host}:{$port}</b>"
+
+    );
     throw new PDOException($e->getMessage(), (int)$e->getCode());
 }
+
 ?>
