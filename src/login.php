@@ -27,8 +27,36 @@
             </div>
         </div>
     </div>
+
+    <div class="toast align-items-center text-bg-danger border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        id="password-alert">
+        <div class="d-flex">
+            <div class="toast-body" id="password-alert-text">
+                {PlaceHolder}
+            </div>
+            <div class="spinner-grow spinner-grow-sm alert-icn" role="status">
+                <span class="visually-hidden"></span>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
+    /* Display an error message if smth is wrong w/ the password */
+    const displayAlert = (alertText) => {
+        document.getElementById('password-alert-text').innerHTML = alertText;
+        document.getElementById('password-alert').classList.add('dp');
+        setTimeout(() => {
+            document
+                .getElementById('password-alert')
+                .classList
+                .remove('dp');
+        }, 8000);
+    }
+
+    /* Handle login form submission(s) and response(s) */
     document.addEventListener('DOMContentLoaded', (_dcme) => {
         document
             .getElementById("submit-login")
@@ -74,9 +102,22 @@
                                         JSON.stringify(userSession)
                                     );
 
-                                   window.location.href = './src/main.php';
+                                    window.location.href = './src/main.php';
                                 }
-                                console.log(data);
+                            } else {
+                                switch (this.status) {
+                                    case 401:
+                                        displayAlert("Password or username does not match records!");
+                                        break;
+
+                                    case 422:
+                                        displayAlert("Password or username is missing! Check input fields!")
+                                        break;
+
+                                    default:
+                                        displayAlert("Something went wrong with login!");
+                                        break;
+                                }
                             }
                         };
 

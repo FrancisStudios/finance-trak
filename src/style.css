@@ -35,11 +35,31 @@ html body {
     margin-top: 10px;
 }
 
-#bg-auth{
+#bg-auth {
     position: absolute;
     z-index: 9999999;
     bottom: 10px;
     right: 20px;
+}
+
+#password-alert {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    max-width: 70%;
+}
+
+.dp {
+    display: block !important;
+}
+
+.dp-none {
+    display: none;
+}
+
+.alert-icn{
+    margin-right: 10px !important;
+    margin-top: 10px !important;
 }
 
 /* Pattern background from www.magicpattern.design */
